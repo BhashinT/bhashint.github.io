@@ -9,9 +9,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<canvas id="bg-canvas"></canvas>
   <div class="container">
     <header class="site-title"><a href = "index.html" style="color: var(--primary-color); text-decoration:none;" >Bhashin Thakore</a></header>
-    <p class="tagline">PhD Student, Università degli Studi di Torino<span class="cursor"></span></p>
+    <p class="tagline">PhD Student, Università degli Studi di Torino/Universitiet Van Amsterdam<span class="cursor"></span></p>
 <nav aria-label="Main navigation">
   <div class="nav-container">
     <a href="about.html"><i class="fas fa-user"></i> About Me</a>
@@ -22,7 +23,7 @@
 </nav>
 
 
-    <main><section id="about">
+    <main><section id="about" class="fade-in">
 <div class="neo-box">
 <div class="neo-inner">
 <div class="section-header">
@@ -34,7 +35,7 @@
 <img alt="Bhashin Thakore" src="Website_profile.jpg"/>
 </div>
 <div>
-<p>I am a PhD student in Physics at the Università degli Studi di Torino (UniTo), working under the supervision of Marco Regis. I completed my Master's degree in Astrophysics from LMU, Munich with Daniel Gruen as my thesis supervisor, and my Bachelor's degree in Physics from Pandit Deendayal Energy University (PDEU) in Gandhinagar, India. I am originally from Surat, an Indian city known for its prolific diamond and textile businesses.</p>
+<p>I am a joint PhD student in Physics at the Università degli Studi di Torino (UniTo) and Universiteit Van Amsterdam (UvA), working under the supervision of Marco Regis (UniTo) and Shin'ichiro Ando (UvA). I completed my Master's degree in Astrophysics from LMU, Munich with Daniel Gruen as my thesis supervisor, and my Bachelor's degree in Physics from Pandit Deendayal Energy University (PDEU) in Gandhinagar, India. I am originally from Surat, an Indian city known for its prolific diamond and textile businesses.</p>
 </div>
 </div>
 <p style="margin-bottom: 20px;">My research involves telling the story of the Universe by looking at its visible and invisible matter and light components, and answering the fundamental questions that could enhance or change the way we think about the Universe: How do we glean the true nature of dark matter? What are the objects contributing to unresolved backgrounds of light at different wavelengths, and how can we separate them? Specifically, how do we reliably use cross-correlations between gravitational tracers of large scale structure and the unresolved backgrounds from various electromagnetic wavelengths to separate its dark and astrophysical components? Below you can find my current attempts at figuring out exactly this, with a description of how far along the project has come.</p>
@@ -67,10 +68,11 @@
 </div>
 </div>
 </section></main>
-    <footer>
+    <footer class="fade-in">
       <p>© 2025 // Bhashin Thakore // All Rights Reserved</p>
       <p>Background image credit: Jasper Garratt</p>
     </footer>
   </div>
+<script src="particles.js"></script>
 </body>
 </html>

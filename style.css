@@ -1,603 +1,545 @@
-
-    :root {
-      --bg-color: #060a1a;
-      --text-color: #e0f7ff;
-      --primary-color: #7fbfff;
-      --secondary-color: #406080;
-      --accent-color: #ffcc00;
-      --dark-accent: #101536;
-      --grid-color: transparent;
-      --border-radius: 8px;
-      --box-shadow: 0 0 20px rgba(0, 238, 255, 0.15);
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      font-family: 'Space Mono Font', monospace;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      line-height: 1.6;
-      overflow-x: hidden;
-      
-  background: #060a1a url('Mayne_Island_Canada_Jasper_Garratt.jpg') no-repeat center center fixed;
-  background-size: cover;
-
-      position: relative;
-    }
-    
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, transparent 0%, var(--bg-color) 80%);
-      pointer-events: none;
-      z-index: -1;
-    }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-      position: relative;
-    }
-    
-    header.site-title {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 4rem;
-      font-weight: bold;
-      text-align: center;
-      margin: 3rem 0 1rem;
-      position: relative;
-      color: var(--primary-color);
-      text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
-      letter-spacing: 2px;
-    }
-    
-    
-    .glitch {
-      content: attr(data-text);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    
-    /* .glitch::before removed */ {
-      left: 2px;
-      text-shadow: -2px 0 var(--secondary-color);
-      
-      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-    }
-    
-    .glitch {
-      left: -2px;
-      text-shadow: 2px 0 var(--accent-color);
-      
-      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-    }
-    
-    /* @keyframes glitch-1 removed */ {
-      0%, 80%, 100% { transform: none; opacity: 1; }
-      20% { transform: translateX(-2px); opacity: 1; }
-      40% { transform: translateX(2px); opacity: 1; }
-      60% { transform: none; opacity: 0.8; }
-    }
-    
-    /* @keyframes glitch-2 removed */ {
-      0%, 80%, 100% { transform: none; opacity: 1; }
-      20% { transform: translateX(2px); opacity: 1; }
-      40% { transform: translateX(-2px); opacity: 1; }
-      60% { transform: none; opacity: 0.8; }
-    }
-    
-    .tagline {
-      text-align: center;
-      font-size: 1.2rem;
-      margin-bottom: 3rem;
-      color: var(--primary-color);
-      letter-spacing: 2px;
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-    
-    .tagline::after {
-      content: "";
-      position: absolute;
-      left: 35%;
-      right: 35%;
-      bottom: -10px;
-      height: 1px;
-      background: linear-gradient(90deg, 
-        transparent, 
-        var(--primary-color), 
-        var(--primary-color), 
-        transparent);
-    }
-    
-    .neo-box {
-      position: relative;
-      background-color: rgba(10, 15, 35, 0.7);
-      border: 1px solid var(--primary-color);
-      box-shadow: var(--box-shadow), 
-                  inset 0 0 15px rgba(0, 238, 255, 0.1);
-      border-radius: var(--border-radius);
-      padding: 0.1rem;
-      margin-bottom: 2rem;
-      overflow: hidden;
-      backdrop-filter: blur(5px);
-    }
-    
-    .neo-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 50%;
-      height: 1px;
-      background-color: var(--primary-color);
-      animation: scanline 6s linear infinite;
-    }
-    
-    @keyframes scanline {
-      0% { left: -100%; }
-      100% { left: 200%; }
-    }
-    
-    .neo-inner {
-      border: 1px solid rgba(0, 238, 255, 0.2);
-      padding: 2rem;
-      position: relative;
-      z-index: 2;
-    }
-    
-    nav {
-      position: sticky;
-      top: 2rem;
-      z-index: 100;
-      margin: 2rem 0 4rem;
-    }
-    
-    .nav-container {
-      display: flex;
-      justify-content: center;
-      gap: 0;
-    }
-    
-    nav a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-size: 1.1rem;
-      position: relative;
-      padding: 0.7rem 1.5rem;
-      transition: all 0.3s ease;
-      letter-spacing: 1px;
-      border: 1px solid var(--primary-color);
-      background-color: rgba(10, 15, 35, 0.7);
-      overflow: hidden;
-      margin: 0 -1px;
-      backdrop-filter: blur(10px);
-      font-family: 'Share Tech Mono', monospace;
-    }
-    
-    nav a::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 238, 255, 0.2), transparent);
-      transition: left 0.5s ease;
-    }
-    
-    nav a:hover {
-      color: var(--primary-color);
-      box-shadow: 0 0 15px var(--primary-color);
-      z-index: 1;
-    }
-    
-    nav a:hover::before {
-      left: 100%;
-    }
-    
-    section {
-      margin: 4rem 0;
-    }
-    
-    h2 {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      color: var(--primary-color);
-      position: relative;
-      display: inline-block;
-      letter-spacing: 2px;
-    }
-    
-    h2::before {
-      content: '[';
-      color: var(--accent-color);
-      margin-right: 0.5rem;
-    }
-    
-    h2::after {
-      content: ']';
-      color: var(--accent-color);
-      margin-left: 0.5rem;
-    }
-    
-    .section-header {
-      position: relative;
-      border-bottom: 1px solid var(--primary-color);
-      margin-bottom: 2rem;
-      padding-bottom: 0.5rem;
-    }
-    
-    .section-header::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      width: 50%;
-      height: 3px;
-      background: linear-gradient(90deg, var(--primary-color), transparent);
-    }
-    
-    ul {
-      list-style-type: none;
-    }
-    
-    ul li {
-      margin-bottom: 1.5rem;
-      padding-left: 1.5rem;
-      position: relative;
-    }
-    
-    ul li::before {
-      content: '>';
-      color: var(--accent-color);
-      position: absolute;
-      left: 0;
-    }
-    
-    .research-item {
-      margin-bottom: 2rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-left: 3px solid var(--primary-color);
-      padding-left: 1.5rem;
-      position: relative;
-    }
-    
-    .research-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -3px;
-      width: 3px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-      transform: scaleY(0);
-      transform-origin: top;
-      transition: transform 0.3s ease;
-    }
-    
-    .research-item:hover {
-      transform: translateX(5px);
-    }
-    
-    .research-item:hover::before {
-      transform: scaleY(1);
-    }
-    
-    .research-item h3 {
-      color: var(--primary-color);
-      margin-bottom: 0.8rem;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 1.4rem;
-    }
-    
-    .comm-icon {
-      margin-right: 1rem;
-      color: var(--accent-color);
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(255, 42, 109, 0.3);
-      border-radius: 50%;
-      transition: all 0.3s ease;
-    }
-    
-    .contact-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .contact-item:hover .comm-icon {
-      background-color: rgba(255, 42, 109, 0.1);
-      border-color: var(--accent-color);
-      box-shadow: 0 0 10px rgba(255, 42, 109, 0.3);
-    }
-    
-    .contact-link {
-      color: var(--primary-color);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      position: relative;
-      padding: 0 5px;
-    }
-    
-    /* Removed the ::after pseudo-element that created the underline animation */
-    
-    .contact-link:hover {
-      color: var(--accent-color);
-      text-shadow: 0 0 5px var(--primary-color);
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 4rem;
-      padding: 2rem;
-      border-top: 1px solid var(--primary-color);
-      font-size: 0.9rem;
-      position: relative;
-    }
-    
-    footer::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 25%;
-      width: 50%;
-      height: 1px;
-      background: linear-gradient(90deg, 
-        transparent, 
-        var(--primary-color), 
-        var(--primary-color), 
-        transparent);
-    }
-    
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-    
-    .social-links a {
-      color: var(--text-color);
-      font-size: 1.5rem;
-      transition: all 0.3s ease;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--primary-color);
-      border-radius: 50%;
-      background-color: rgba(10, 15, 35, 0.7);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .social-links a::before {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to bottom, transparent, var(--primary-color));
-      opacity: 0.2;
-      transition: top 0.3s ease;
-    }
-    
-    .social-links a:hover {
-      color: var(--primary-color);
-      transform: translateY(-3px);
-      box-shadow: 0 0 10px var(--primary-color);
-    }
-    
-    .social-links a:hover::before {
-      top: 0;
-    }
-    
-    /* About section with image */
-    .about-container {
-      display: flex;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      align-items: flex-start;
-    }
-    
-    .profile-image {
-      flex-shrink: 0;
-      width: 240px;
-      border: 2px solid var(--primary-color);
-      box-shadow: 0 0 15px rgba(0, 238, 255, 0.3);
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--border-radius);
-    }
-    
-    .profile-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-    
-    .profile-image::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, rgba(0, 238, 255, 0.2), transparent);
-      z-index: 1;
-    }
-    
-    .profile-image:hover img {
-      transform: scale(1.05);
-    }
-
-    /* Animation for the blinking cursor */
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 20px;
-      background-color: var(--primary-color);
-      margin-left: 5px;
-      animation: blink 1s infinite;
-    }
-    
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    
-    /* Data visualization effect */
-    .data-visual {
-      height: 40px;
-      display: flex;
-      align-items: flex-end;
-      gap: 3px;
-      margin: 2rem 0;
-    }
-    
-    .data-bar {
-      flex: 1;
-      background-color: var(--primary-color);
-      height: 100%;
-      transform-origin: bottom;
-      animation: dataViz 2s infinite alternate;
-      box-shadow: 0 0 5px var(--primary-color);
-      opacity: 0.7;
-    }
-    
-    .data-bar:nth-child(odd) {
-      animation-delay: 0.5s;
-    }
-    
-    @keyframes dataViz {
-      0% { transform: scaleY(0.3); }
-      100% { transform: scaleY(1); }
-    }
-    
-    /* Cyberpunk section headers */
-    .cyber-header {
-      display: inline-flex;
-      align-items: center;
-      font-family: 'Share Tech Mono', monospace;
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-      color: var(--primary-color);
-    }
-    
-    .cyber-header::before,
-    .cyber-header::after {
-      content: '';
-      height: 1px;
-      background-color: var(--primary-color);
-      box-shadow: 0 0 5px var(--primary-color);
-    }
-    
-    .cyber-header::before {
-      width: 30px;
-      margin-right: 15px;
-    }
-    
-    .cyber-header::after {
-      flex: 1;
-      margin-left: 15px;
-    }
-    
-    /* Responsive design */
-    @media (max-width: 768px) {
-      header.site-title {
-        font-size: 2.5rem;
-      }
-      
-      .nav-container {
-        flex-direction: column;
-        gap: 0;
-      }
-      
-      nav a {
-        width: 100%;
-        text-align: center;
-        margin: -1px 0;
-      }
-      
-      .neo-inner {
-        padding: 1.5rem;
-      }
-      
-      h2 {
-        font-size: 1.7rem;
-      }
-      
-      .about-container {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .profile-image {
-        margin-bottom: 1.5rem;
-        max-width: 100%;
-      }
-    }
-  .fancy-nav {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  margin-top: 20px;
+:root {
+  --bg-color: #06000f;
+  --text-color: #c8ffe8;
+  --primary-color: #00ff87;
+  --secondary-color: #1a0040;
+  --accent-color: #9f00ff;
+  --dark-accent: #0d001f;
+  --grid-color: rgba(0, 255, 135, 0.07);
+  --border-radius: 8px;
+  --box-shadow: 0 0 20px rgba(0, 255, 135, 0.15);
 }
 
-.fancy-nav a {
-  padding: 10px 20px;
-  background-color: #f0f0f0;
-  color: #333;
-  border-radius: 30px;
-  text-decoration: none;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Share Tech Mono', monospace;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(159, 0, 255, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(0, 255, 135, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Scroll reveal */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+header.site-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 4rem;
   font-weight: bold;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin: 3rem 0 1rem;
+  position: relative;
+  color: var(--primary-color);
+  text-shadow: 0 0 8px var(--primary-color), 0 0 30px rgba(0, 255, 135, 0.35);
+  letter-spacing: 2px;
+}
+
+.tagline {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  color: var(--primary-color);
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.tagline::after {
+  content: "";
+  position: absolute;
+  left: 35%;
+  right: 35%;
+  bottom: -10px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--primary-color),
+    var(--primary-color),
+    transparent);
+}
+
+.neo-box {
+  position: relative;
+  background-color: rgba(6, 0, 20, 0.78);
+  border: 1px solid var(--primary-color);
+  box-shadow: var(--box-shadow),
+              inset 0 0 15px rgba(0, 255, 135, 0.05);
+  border-radius: var(--border-radius);
+  padding: 0.1rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+.neo-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 1px;
+  background-color: var(--primary-color);
+  animation: scanline 6s linear infinite;
+}
+
+@keyframes scanline {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+
+.neo-inner {
+  border: 1px solid rgba(0, 255, 135, 0.12);
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+nav {
+  position: sticky;
+  top: 2rem;
+  z-index: 100;
+  margin: 2rem 0 4rem;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+}
+
+nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.1rem;
+  position: relative;
+  padding: 0.7rem 1.5rem;
   transition: all 0.3s ease;
+  letter-spacing: 1px;
+  border: 1px solid var(--primary-color);
+  background-color: rgba(6, 0, 20, 0.82);
+  overflow: hidden;
+  margin: 0 -1px;
+  backdrop-filter: blur(10px);
+  font-family: 'Share Tech Mono', monospace;
+}
+
+nav a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 135, 0.15), transparent);
+  transition: left 0.5s ease;
+}
+
+nav a:hover {
+  color: var(--primary-color);
+  box-shadow: 0 0 18px rgba(0, 255, 135, 0.4);
+  z-index: 1;
+  text-shadow: 0 0 8px var(--primary-color);
+}
+
+nav a:hover::before {
+  left: 100%;
+}
+
+section {
+  margin: 4rem 0;
+}
+
+h2 {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  position: relative;
+  display: inline-block;
+  letter-spacing: 2px;
+}
+
+h2::before {
+  content: '[';
+  color: var(--accent-color);
+  margin-right: 0.5rem;
+}
+
+h2::after {
+  content: ']';
+  color: var(--accent-color);
+  margin-left: 0.5rem;
+}
+
+.section-header {
+  position: relative;
+  border-bottom: 1px solid rgba(0, 255, 135, 0.4);
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 50%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), transparent);
+}
+
+ul {
+  list-style-type: none;
+}
+
+ul li {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+ul li::before {
+  content: '>';
+  color: var(--accent-color);
+  position: absolute;
+  left: 0;
+}
+
+.research-item {
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 3px solid var(--primary-color);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.research-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s ease;
+}
+
+.research-item:hover {
+  transform: translateX(5px);
+}
+
+.research-item:hover::before {
+  transform: scaleY(1);
+}
+
+.research-item h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.8rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.4rem;
+}
+
+.comm-icon {
+  margin-right: 1rem;
+  color: var(--accent-color);
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  border: 1px solid rgba(159, 0, 255, 0.4);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.fancy-nav a:hover {
-  background-color: var(--primary-color);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.2);
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.fancy-nav i {
-  font-size: 1rem;
+.contact-item:hover .comm-icon {
+  background-color: rgba(159, 0, 255, 0.12);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 12px rgba(159, 0, 255, 0.4);
 }
-.fancy-nav {
+
+.contact-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0 5px;
+}
+
+.contact-link:hover {
+  color: var(--accent-color);
+  text-shadow: 0 0 6px var(--primary-color);
+}
+
+footer {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 2rem;
+  border-top: 1px solid rgba(0, 255, 135, 0.25);
+  font-size: 0.9rem;
+  position: relative;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 25%;
+  width: 50%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--primary-color),
+    var(--primary-color),
+    transparent);
+}
+
+.social-links {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  position: static; /* or just remove any positioning */
-  z-index: auto;
+  margin-top: 1rem;
+}
+
+.social-links a {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--primary-color);
+  border-radius: 50%;
+  background-color: rgba(6, 0, 20, 0.82);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-links a::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--primary-color));
+  opacity: 0.2;
+  transition: top 0.3s ease;
+}
+
+.social-links a:hover {
+  color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 0 12px var(--primary-color);
+}
+
+.social-links a:hover::before {
+  top: 0;
+}
+
+/* About section */
+.about-container {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.profile-image {
+  flex-shrink: 0;
+  width: 240px;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 18px rgba(0, 255, 135, 0.3);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+}
+
+.profile-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.profile-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(0, 255, 135, 0.12), transparent);
+  z-index: 1;
+}
+
+.profile-image:hover img {
+  transform: scale(1.05);
+}
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 20px;
+  background-color: var(--primary-color);
+  margin-left: 5px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Data viz bars */
+.data-visual {
+  height: 40px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  margin: 2rem 0;
+}
+
+.data-bar {
+  flex: 1;
+  background-color: var(--primary-color);
+  height: 100%;
+  transform-origin: bottom;
+  animation: dataViz 2s infinite alternate;
+  box-shadow: 0 0 5px var(--primary-color);
+  opacity: 0.65;
+}
+
+.data-bar:nth-child(odd) {
+  animation-delay: 0.5s;
+  background-color: var(--accent-color);
+  box-shadow: 0 0 5px var(--accent-color);
+}
+
+@keyframes dataViz {
+  0%   { transform: scaleY(0.2); }
+  100% { transform: scaleY(1); }
+}
+
+/* Cyber section sub-headers */
+.cyber-header {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Share Tech Mono', monospace;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.cyber-header::before,
+.cyber-header::after {
+  content: '';
+  height: 1px;
+  background-color: var(--primary-color);
+  box-shadow: 0 0 5px var(--primary-color);
+}
+
+.cyber-header::before {
+  width: 30px;
+  margin-right: 15px;
+}
+
+.cyber-header::after {
+  flex: 1;
+  margin-left: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header.site-title {
+    font-size: 2.5rem;
+  }
+
+  .nav-container {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  nav a {
+    width: 100%;
+    text-align: center;
+    margin: -1px 0;
+  }
+
+  .neo-inner {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+  }
+
+  .about-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-image {
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+  }
 }
