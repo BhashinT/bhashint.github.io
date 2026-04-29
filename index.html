@@ -3,29 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home - Bhashin Thakore</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space_Font+Mono&display=swap" rel="stylesheet">
+  <title>Bhashin Thakore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <header class="site-title"><a href = "index.html" style="color: var(--primary-color); text-decoration:none;" >Bhashin Thakore</a></header>
+    <header class="site-title">
+      <a href="index.html" style="color: var(--green); text-decoration: none;">Bhashin Thakore</a>
+    </header>
     <p class="tagline">PhD Student, Università degli Studi di Torino<span class="cursor"></span></p>
-    
-<nav aria-label="Main navigation">
-  <div class="nav-container">
-    <a href="about.html"><i class="fas fa-user"></i> About Me</a>
-    <a href="projects.html"><i class="fas fa-lightbulb"></i> Projects</a>
-    <a href="publications.html"><i class="fas fa-book"></i> Publications</a>
-    <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
-  </div>
-</nav>
-    
-    <main><p class='tagline'></p></main>
+
+    <nav aria-label="Main navigation" class="arc-nav-wrapper">
+      <svg class="arc-nav" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- About Me — top -->
+        <a href="about.html" class="arc-link arc-top">
+          <path d="M75.3,65.7 A155,155 0 0,1 284.7,65.7 L240.8,113.6 A90,90 0 0,0 119.2,113.6 Z" class="arc-segment"/>
+          <text x="180" y="57.5" class="arc-label" dominant-baseline="middle" text-anchor="middle">About Me</text>
+        </a>
+
+        <!-- Projects — right -->
+        <a href="projects.html" class="arc-link arc-right">
+          <path d="M294.3,75.3 A155,155 0 0,1 294.3,284.7 L246.4,240.8 A90,90 0 0,0 246.4,119.2 Z" class="arc-segment"/>
+          <text x="302.5" y="180" class="arc-label" dominant-baseline="middle" text-anchor="middle" transform="rotate(-90 302.5 180)">Projects</text>
+        </a>
+
+        <!-- Publications — bottom -->
+        <a href="publications.html" class="arc-link arc-bottom">
+          <path d="M284.7,294.3 A155,155 0 0,1 75.3,294.3 L119.2,246.4 A90,90 0 0,0 240.8,246.4 Z" class="arc-segment"/>
+          <text x="180" y="302.5" class="arc-label" dominant-baseline="middle" text-anchor="middle">Publications</text>
+        </a>
+
+        <!-- Contact — left -->
+        <a href="contact.html" class="arc-link arc-left">
+          <path d="M65.7,284.7 A155,155 0 0,1 65.7,75.3 L113.6,119.2 A90,90 0 0,0 113.6,240.8 Z" class="arc-segment"/>
+          <text x="57.5" y="180" class="arc-label" dominant-baseline="middle" text-anchor="middle" transform="rotate(90 57.5 180)">Contact</text>
+        </a>
+
+        <!-- Center decoration -->
+        <circle cx="180" cy="180" r="70" class="arc-center-ring"/>
+        <text x="180" y="180" class="arc-center-label" dominant-baseline="middle" text-anchor="middle">Explore</text>
+
+      </svg>
+    </nav>
+
     <footer>
-      <p>© 2025 // Bhashin Thakore // All Rights Reserved</p>
-      <p>Background image credit: Jasper Garratt</p>
+      <p>© 2026 // Bhashin Thakore // All Rights Reserved</p>
     </footer>
   </div>
 </body>
