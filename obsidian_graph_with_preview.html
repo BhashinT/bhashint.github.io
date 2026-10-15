@@ -137,6 +137,9 @@
                 { id: "lensxgamma2025", label: "Lensing x Gamma-Rays (2025)", group: 3 },
                 { id: "anisotropicfr2021", label: "Pandya et. al. (2021)", group: 3 },
                 { id: "anisotropicgr2021", label: "Solanki et. al. (2021)", group: 3 },
+                { id: "gammaraybg", label: "Unresolved Gamma-Ray Background", group: 2 },
+                { id: "multitracer2026", label: "Multi-Tracer Gamma-Rays (2026)", group: 3 },
+                { id: "clusteringbias2026", label: "Gamma-Ray Clustering Bias (2026)", group: 3 },
             ],
             links: [
                 { source: "compactstars", target: "anisotropicgr2020" },
@@ -147,12 +150,40 @@
                 { source: "compactstars", target: "darkmatter"},
                 { source: "anisotropicgr2020", target: "anisotropicgr2021"},
                 { source: "anisotropicgr2021", target: "anisotropicgr2020"},
+                { source: "gammaraybg", target: "darkmatter" },
+                { source: "gammaraybg", target: "lensxgamma2025" },
+                { source: "gammaraybg", target: "multitracer2026" },
+                { source: "gammaraybg", target: "clusteringbias2026" },
+                { source: "darkmatter", target: "multitracer2026" },
+                { source: "lensxgamma2025", target: "multitracer2026" },
+                { source: "multitracer2026", target: "clusteringbias2026" },
             ]
         };
 
         // Function to map node IDs to URLs and preview images
         function getNodeInfo(nodeId) {
             const nodeMap = {
+                "gammaraybg": {
+                    url: "https://en.wikipedia.org/wiki/Gamma-ray_background",
+                    title: "Unresolved Gamma-Ray Background",
+                    preview: "The diffuse glow of gamma-ray sources too faint to resolve individually",
+                    image: null,
+                    imageType: "none"
+                },
+                "multitracer2026": {
+                    url: "https://arxiv.org/abs/2601.13312",
+                    title: "Multi-Tracer Gamma-Rays (2026)",
+                    preview: "Cross-correlating the unresolved gamma-ray sky (12 yr Fermi-LAT) with DES Y3 galaxies and weak lensing: 10.3σ combined detection. Published in JCAP (2026).",
+                    image: null,
+                    imageType: "none"
+                },
+                "clusteringbias2026": {
+                    url: "https://arxiv.org/abs/2609.19259",
+                    title: "Gamma-Ray Clustering Bias (2026)",
+                    preview: "Lensing x gamma-ray constraints on how strongly faint gamma-ray sources cluster: bias ≳ 2 at z ≈ 1, host halos ~10¹³ M☉.",
+                    image: null,
+                    imageType: "none"
+                },
                 "lensxgamma2025": {
                     url: "https://arxiv.org/pdf/2501.10506",
                     title: "Lensing x Gamma-Rays (2025)",
