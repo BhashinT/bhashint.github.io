@@ -18,7 +18,8 @@
 }
 
 body {
-  font-family: 'Space Mono', monospace;
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 1.05rem;
   background-color: var(--bg);
   background-image:
     radial-gradient(ellipse at 15% 40%, rgba(61, 255, 160, 0.05) 0%, transparent 55%),
@@ -35,6 +36,13 @@ body {
   margin: 0 auto;
   padding: 2rem;
 }
+
+/* Monospace stays for the "terminal" details: names, headings, labels */
+header.site-title, .tagline, nav a, h2, h3, .cyber-header, footer, .pb {
+  font-family: 'Space Mono', monospace;
+}
+
+p { margin-bottom: 1rem; }
 
 /* ── Header ── */
 header.site-title {
@@ -53,7 +61,7 @@ header.site-title {
   text-align: center;
   font-size: 0.95rem;
   margin-bottom: 2.5rem;
-  color: var(--text-dim);
+  color: #7fa995;
   letter-spacing: 2px;
 }
 
@@ -321,14 +329,14 @@ footer {
 }
 
 .arc-segment {
-  fill: rgba(8, 24, 18, 0.85);
-  stroke: rgba(61, 255, 160, 0.2);
+  fill: rgba(10, 30, 22, 0.9);
+  stroke: rgba(61, 255, 160, 0.4);
   stroke-width: 1;
   transition: fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
 }
 
 .arc-label {
-  fill: var(--text-dim);
+  fill: #a8d9c2;
   font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 1.5px;
@@ -338,7 +346,7 @@ footer {
 
 .arc-center-ring {
   fill: rgba(8, 24, 18, 0.9);
-  stroke: rgba(192, 132, 252, 0.2);
+  stroke: rgba(127, 191, 255, 0.45);
   stroke-width: 1;
   animation: arc-pulse 4s ease-in-out infinite;
 }
@@ -349,7 +357,7 @@ footer {
 }
 
 .arc-center-label {
-  fill: var(--text-dim);
+  fill: #c9ddf2;
   font-family: 'Space Mono', monospace;
   font-size: 15px;
   font-weight: 700;
@@ -377,6 +385,96 @@ footer {
   fill: var(--green);
 }
 
+/* ── Project progress bars (About page) ── */
+.cyber-list li { margin-bottom: 2rem; }
+
+.pb {
+  --pb-done: #3dffa0;
+  --pb-now: #ff4d5e;
+  --pb-line: rgba(127, 191, 255, 0.25);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 1rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.pb .pb-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+.pb .pb-step::before { content: none; }
+
+/* connecting line into each step */
+.pb .pb-step + .pb-step::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--pb-line);
+  z-index: 0;
+}
+.pb .pb-step.done + .pb-step::after {
+  background: var(--pb-done);
+  box-shadow: 0 0 8px rgba(61, 255, 160, 0.6);
+}
+
+.pb .pb-dot {
+  position: relative;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #101536;
+  border: 2px solid rgba(127, 191, 255, 0.35);
+}
+.pb .done .pb-dot {
+  background: var(--pb-done);
+  border-color: var(--pb-done);
+  box-shadow: 0 0 10px var(--pb-done);
+}
+.pb .current .pb-dot {
+  background: var(--pb-now);
+  border-color: var(--pb-now);
+  animation: pb-pulse 2s infinite;
+  --pb-glow: var(--pb-now);
+}
+.pb .current.final .pb-dot {
+  background: var(--pb-done);
+  border-color: var(--pb-done);
+  --pb-glow: var(--pb-done);
+}
+
+@keyframes pb-pulse {
+  0%, 100% { box-shadow: 0 0 8px var(--pb-glow); }
+  50%      { box-shadow: 0 0 20px var(--pb-glow), 0 0 30px var(--pb-glow); }
+}
+
+.pb .pb-label {
+  margin-top: 0.6rem;
+  padding: 0 4px;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  overflow-wrap: anywhere;
+}
+.pb .done .pb-label { color: var(--pb-done); }
+.pb .current .pb-label { color: var(--pb-now); font-weight: 700; }
+.pb .current.final .pb-label { color: var(--pb-done); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pb .current .pb-dot { animation: none; box-shadow: 0 0 12px var(--pb-glow); }
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   header.site-title { font-size: 2.2rem; }
@@ -390,4 +488,11 @@ footer {
   .profile-image { width: 160px; }
 
   h2 { font-size: 1.2rem; }
+
+  body { font-size: 1rem; }
+  .tagline { font-size: 0.8rem; letter-spacing: 1px; }
+  .pb { margin-left: -1.5rem; }
+  .pb .pb-dot { width: 16px; height: 16px; }
+  .pb .pb-step + .pb-step::after { top: 7px; }
+  .pb .pb-label { font-size: 0.5rem; letter-spacing: 0; padding: 0; }
 }
