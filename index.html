@@ -7,6 +7,138 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Explore button ── */
+    .arc-link.arc-center { transform-origin: 180px 180px; }
+    .arc-link.arc-center:hover, .arc-link.arc-center:focus-visible { transform: scale(1.05); }
+    .arc-link.arc-center:hover .arc-center-ring,
+    .arc-link.arc-center:focus-visible .arc-center-ring {
+      fill: rgba(10, 20, 40, 0.95);
+      stroke: #7fbfff;
+      filter: drop-shadow(0 0 14px rgba(127, 191, 255, 0.55));
+      animation: none;
+    }
+    .arc-link.arc-center:hover .arc-center-label,
+    .arc-link.arc-center:focus-visible .arc-center-label { fill: #f4f8ff; }
+
+    /* ── Door transition ── */
+    .portal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      perspective: 1400px;
+      pointer-events: none;
+      visibility: hidden;
+    }
+    .portal.active { visibility: visible; pointer-events: auto; }
+
+    /* what lies beyond the doors */
+    .portal .beyond {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(1.5px 1.5px at 20% 30%, #fff, transparent),
+        radial-gradient(1px 1px at 70% 20%, #cfe4ff, transparent),
+        radial-gradient(1.2px 1.2px at 40% 70%, #fff, transparent),
+        radial-gradient(1px 1px at 85% 60%, #9fc9ff, transparent),
+        radial-gradient(1.4px 1.4px at 60% 85%, #fff, transparent),
+        radial-gradient(1px 1px at 10% 80%, #cfe4ff, transparent),
+        radial-gradient(1.2px 1.2px at 30% 12%, #9fc9ff, transparent),
+        radial-gradient(1px 1px at 92% 35%, #fff, transparent),
+        radial-gradient(circle at 50% 50%, #cfe4ff 0%, #5d8fff 18%, #142a66 42%, #02040b 75%);
+      transform: scale(1);
+      transition: transform 1.6s cubic-bezier(0.6, 0, 0.4, 1);
+    }
+
+    .portal .door {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      background: #060e0b;
+      backface-visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.35s ease, transform 1.3s cubic-bezier(0.7, 0, 0.3, 1);
+    }
+    .portal .door-l { left: 0; transform-origin: left center; border-right: 1px solid rgba(127, 191, 255, 0.35); }
+    .portal .door-r { right: 0; transform-origin: right center; border-left: 1px solid rgba(127, 191, 255, 0.35); }
+
+    /* panel engraving */
+    .portal .door::before {
+      content: "";
+      position: absolute;
+      inset: 6vh 4vw;
+      border: 1px solid rgba(61, 255, 160, 0.14);
+      border-radius: 6px;
+    }
+    .portal .door-l::before { right: 3vw; }
+    .portal .door-r::before { left: 3vw; }
+
+    /* the Explore ring, split down the middle */
+    .portal .door::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 140px;
+      height: 140px;
+      margin-top: -70px;
+      border-radius: 50%;
+      border: 1px solid rgba(127, 191, 255, 0.6);
+      box-shadow: 0 0 18px rgba(127, 191, 255, 0.35);
+    }
+    .portal .door-l::after { right: -70px; }
+    .portal .door-r::after { left: -70px; }
+
+    .portal .half-word {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 4px;
+      color: #f4f8ff;
+      white-space: nowrap;
+    }
+    .portal .door-l .half-word { left: 100%; }
+    .portal .door-r .half-word { left: 0; }
+
+    /* light through the crack */
+    .portal .seam {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 0;
+      transform: translate(-50%, -50%);
+      background: #ffffff;
+      box-shadow: 0 0 12px 3px rgba(207, 228, 255, 0.9), 0 0 40px 10px rgba(93, 143, 255, 0.6);
+      opacity: 0;
+      transition: height 0.45s ease-out, opacity 0.2s;
+      z-index: 2;
+    }
+
+    .portal .flood {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, #ffffff 0%, #cfe4ff 25%, #5d8fff 55%, #02040b 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease-in;
+      z-index: 3;
+    }
+
+    .container { transition: opacity 0.35s ease, transform 0.35s ease; }
+    body.entering .container { opacity: 0; transform: scale(0.97); }
+
+    .portal.active .door { opacity: 1; }
+    .portal.crack .seam { height: 100%; opacity: 1; }
+    .portal.open .door-l { transform: rotateY(-105deg); }
+    .portal.open .door-r { transform: rotateY(105deg); }
+    .portal.open .seam { opacity: 0; transition: opacity 0.3s; }
+    .portal.open .beyond { transform: scale(1.8); }
+    .portal.flooding .flood { opacity: 1; }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -42,9 +174,11 @@
           <text x="57.5" y="180" class="arc-label" dominant-baseline="middle" text-anchor="middle" transform="rotate(90 57.5 180)">Contact</text>
         </a>
 
-        <!-- Center decoration -->
-        <circle cx="180" cy="180" r="70" class="arc-center-ring"/>
-        <text x="180" y="180" class="arc-center-label" dominant-baseline="middle" text-anchor="middle">Explore</text>
+        <!-- Center: Explore (opens the research constellations) -->
+        <a href="explore.html" class="arc-link arc-center" id="explore-link">
+          <circle cx="180" cy="180" r="70" class="arc-center-ring"/>
+          <text x="180" y="180" class="arc-center-label" dominant-baseline="middle" text-anchor="middle">Explore</text>
+        </a>
 
       </svg>
     </nav>
@@ -53,5 +187,47 @@
       <p>© 2026 // Bhashin Thakore // All Rights Reserved</p>
     </footer>
   </div>
+
+  <div class="portal" id="portal" aria-hidden="true">
+    <div class="beyond"></div>
+    <div class="door door-l"><span class="half-word">EXPLORE</span></div>
+    <div class="door door-r"><span class="half-word">EXPLORE</span></div>
+    <div class="seam"></div>
+    <div class="flood"></div>
+  </div>
+
+  <script>
+    (function () {
+      const link = document.getElementById("explore-link");
+      const portal = document.getElementById("portal");
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+      let busy = false;
+
+      link.addEventListener("click", function (e) {
+        // let new-tab clicks and reduced-motion users go straight through
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1 || reduce.matches) return;
+        e.preventDefault();
+        if (busy) return;
+        busy = true;
+        const href = link.getAttribute("href");
+
+        document.body.classList.add("entering");
+        portal.classList.add("active");
+        setTimeout(() => portal.classList.add("crack"), 450);
+        setTimeout(() => portal.classList.add("open"), 950);
+        setTimeout(() => portal.classList.add("flooding"), 1950);
+        setTimeout(() => { window.location.href = href; }, 2350);
+      });
+
+      // coming back with the browser's Back button: close the doors again
+      window.addEventListener("pageshow", function (e) {
+        if (e.persisted) {
+          busy = false;
+          document.body.classList.remove("entering");
+          portal.className = "portal";
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

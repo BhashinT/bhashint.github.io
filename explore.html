@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore - Bhashin Thakore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #02040b;
+      --blue: #7fbfff;
+      --blue-deep: #2f6bff;
+      --white: #f4f8ff;
+      --dim: #6f86a8;
+      --line: rgba(160, 200, 255, 0.28);
+      --line-hot: rgba(200, 225, 255, 0.85);
+      --card: rgba(6, 12, 28, 0.92);
+      --card-border: rgba(127, 191, 255, 0.28);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: var(--bg);
+      color: var(--white);
+      overflow: hidden;
+    }
+
+    #sky {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* faint nebula wash behind the chart */
+    .nebula {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 45% 35% at 70% 45%, rgba(47, 107, 255, 0.10), transparent 70%),
+        radial-gradient(ellipse 35% 30% at 25% 55%, rgba(127, 191, 255, 0.07), transparent 70%);
+    }
+
+    /* ── header ── */
+    .top {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 22px 28px;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .top > * { pointer-events: auto; }
+
+    .home {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .home:hover, .home:focus-visible { color: var(--white); }
+
+    .heading { text-align: right; }
+    .heading .narrow { display: none; }
+    .home { white-space: nowrap; }
+    .heading h1 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .heading p {
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--dim);
+      letter-spacing: 1px;
+    }
+
+    /* ── star chart ── */
+    #chart {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .link {
+      stroke: var(--line);
+      stroke-width: 1;
+      fill: none;
+      transition: stroke 0.25s, stroke-width 0.25s;
+    }
+    .link.hot { stroke: var(--line-hot); stroke-width: 1.6; }
+
+    .star { cursor: pointer; outline: none; }
+    .star .halo { fill: url(#halo); transition: opacity 0.25s, transform 0.25s; transform-box: fill-box; transform-origin: center; }
+    .star .core { fill: var(--white); }
+    .star.topic .core { fill: var(--blue); }
+    .star .ring {
+      fill: none;
+      stroke: var(--blue);
+      stroke-width: 1;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .star:hover .ring, .star:focus-visible .ring, .star.active .ring { opacity: 0.9; }
+    .star:hover .halo, .star:focus-visible .halo, .star.active .halo { transform: scale(1.5); }
+
+    .star-label {
+      fill: var(--white);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      opacity: 0.82;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .star-year { fill: var(--dim); font-size: 11px; pointer-events: none; }
+    .star:hover .star-label, .star.active .star-label { opacity: 1; }
+
+    .const-name {
+      fill: var(--blue);
+      font-size: 15px;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .twinkle { animation: twinkle 3.2s ease-in-out infinite; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    /* ── info card ── */
+    .card {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      width: min(380px, calc(100vw - 32px));
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 22px 22px 20px;
+      z-index: 6;
+      box-shadow: 0 0 40px rgba(47, 107, 255, 0.18);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      backdrop-filter: blur(6px);
+    }
+    .card.open { opacity: 1; transform: none; pointer-events: auto; }
+    .card.left { right: auto; left: 28px; }
+    .card.at-top { bottom: auto; top: 64px; }
+    .card.open ~ .hint { opacity: 0; }
+    .hint { transition: opacity 0.2s; }
+
+    .card .kicker {
+      font-size: 0.66rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    .card h2 {
+      margin-top: 10px;
+      font-size: 1rem;
+      line-height: 1.4;
+      color: var(--white);
+    }
+    .card .meta {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+    .card .summary {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #c9d6ea;
+    }
+    .card .go {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 14px;
+      border: 1px solid var(--blue);
+      border-radius: 6px;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .card .go:hover, .card .go:focus-visible {
+      background: rgba(127, 191, 255, 0.14);
+      box-shadow: 0 0 14px rgba(127, 191, 255, 0.35);
+    }
+    .card .close {
+      position: absolute;
+      top: 10px; right: 12px;
+      background: none;
+      border: none;
+      color: var(--dim);
+      font: inherit;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .card .close:hover { color: var(--white); }
+
+    .hint {
+      position: fixed;
+      left: 28px;
+      bottom: 26px;
+      z-index: 4;
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* ── arrival: the light from the door fades into the sky ── */
+    .arrival {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, #ffffff 0%, #cfe4ff 25%, #5d8fff 55%, #02040b 100%);
+      animation: arrive 1.4s ease-out forwards;
+    }
+    @keyframes arrive {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.6); }
+    }
+
+    /* draw-in for the constellation */
+    .reveal .link { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: draw 1.1s ease-out forwards; animation-delay: var(--d); }
+    .reveal .star, .reveal .const-name { opacity: 0; animation: pop 0.6s ease-out forwards; animation-delay: var(--d); }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes pop { to { opacity: 1; } }
+    .reveal .const-name { animation-name: popdim; }
+    @keyframes popdim { to { opacity: 0.55; } }
+
+    @media (max-width: 700px) {
+      .top { padding: 16px; }
+      .heading h1 { font-size: 0.7rem; letter-spacing: 3px; }
+      .heading p { font-size: 0.62rem; }
+      .heading .wide { display: none; }
+      .heading .narrow { display: inline; }
+      .hint { display: none; }
+      .card { right: 16px; bottom: 16px; }
+      .card.left { left: 16px; }
+      .hint { left: 16px; bottom: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .arrival { display: none; }
+      .twinkle { animation: none; }
+      .reveal .link { animation: none; stroke-dashoffset: 0; }
+      .reveal .star, .reveal .const-name { animation: none; opacity: 1; }
+      .reveal .const-name { opacity: 0.55; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="nebula" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="home" href="index.html">&larr; Home</a>
+    <div class="heading">
+      <h1>Research Constellations</h1>
+      <p><span class="wide">Every star is a paper or a field of study</span><span class="narrow">Tap a star</span></p>
+    </div>
+  </header>
+
+  <svg id="chart" role="img" aria-label="Constellation map of Bhashin Thakore's publications and research topics">
+    <defs>
+      <radialGradient id="halo">
+        <stop offset="0%" stop-color="#cfe4ff" stop-opacity="0.75"/>
+        <stop offset="35%" stop-color="#7fbfff" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#2f6bff" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <g id="links"></g>
+    <g id="names"></g>
+    <g id="stars"></g>
+  </svg>
+
+  <aside class="card" id="card" aria-live="polite">
+    <button class="close" id="card-close" aria-label="Close">&times;</button>
+    <div class="kicker" id="card-kicker"></div>
+    <h2 id="card-title"></h2>
+    <div class="meta" id="card-meta"></div>
+    <p class="summary" id="card-summary"></p>
+    <a class="go" id="card-link" target="_blank" rel="noopener noreferrer">Read on arXiv</a>
+  </aside>
+
+  <div class="hint">Tap a star</div>
+  <div class="arrival" aria-hidden="true"></div>
+
+  <script>
+    // ─────────────────────────────────────────────
+    // Data: topics (bright blue stars) and papers (white stars).
+    // x/y are positions on a 1000 x 640 landscape chart;
+    // mx/my are positions on a 420 x 900 chart used on phones held upright.
+    // To add a paper: add an entry to `stars` and its connections to `links`.
+    // ─────────────────────────────────────────────
+    const stars = [
+      { id: "ugrb", type: "topic", x: 700, y: 300, mx: 190, my: 640, label: "Gamma-Ray Background",
+        title: "Unresolved Gamma-Ray Background",
+        summary: "The faint, diffuse glow left over once every gamma-ray source bright enough to see individually has been removed. My work asks what makes it up: blazars, star-forming galaxies, misaligned AGN, or something darker.",
+        url: "https://en.wikipedia.org/wiki/Gamma-ray_background", linkText: "Learn more" },
+      { id: "dm", type: "topic", x: 470, y: 330, mx: 150, my: 450, label: "Dark Matter",
+        title: "Dark Matter",
+        summary: "Roughly 85% of the matter in the Universe, seen only through its gravity. Cross-correlating light with gravitational tracers is one way to search for the signals it might leave behind.",
+        url: "https://en.wikipedia.org/wiki/Dark_matter", linkText: "Learn more" },
+      { id: "cs", type: "topic", x: 235, y: 300, mx: 140, my: 225, label: "Compact Stars",
+        title: "Compact Stars",
+        summary: "Neutron stars and other ultra-dense objects, where matter is pushed to its limits and general relativity is essential to describe their structure.",
+        url: "https://en.wikipedia.org/wiki/Compact_object", linkText: "Learn more" },
+
+      { id: "lens2025", type: "paper", x: 585, y: 160, mx: 60, my: 560, label: "Lensing × Gamma-Rays", year: "2025",
+        kicker: "Gamma-Ray Background",
+        title: "High-Significance Detection of Correlation Between the Unresolved Gamma-Ray Background and the Large Scale Cosmic Structure",
+        meta: "Thakore, B., et al. · JCAP 2025(06) 037",
+        summary: "A high-significance detection of the correlation between Fermi-LAT's unresolved gamma-ray sky and weak gravitational lensing from the Dark Energy Survey.",
+        url: "https://arxiv.org/abs/2501.10506" },
+      { id: "mt2026", type: "paper", x: 850, y: 235, mx: 330, my: 600, label: "Multi-Tracer γ-Ray Sky", year: "2026",
+        kicker: "Gamma-Ray Background",
+        title: "Multi-Tracer Cross-Correlations of the Unresolved γ-Ray Sky",
+        meta: "Thakore, B., et al. · JCAP 2026(07) 035",
+        summary: "Combining galaxy clustering and weak lensing from DES with 12 years of Fermi-LAT data for a 10σ detection, pointing to an extragalactic origin for the unresolved gamma-ray background.",
+        url: "https://arxiv.org/abs/2601.13312" },
+      { id: "bias2026", type: "paper", x: 875, y: 370, mx: 320, my: 730, label: "Clustering Bias", year: "2026",
+        kicker: "Gamma-Ray Background",
+        title: "On the Clustering Bias of Unresolved Gamma-Ray Sources",
+        meta: "Thakore, B., et al. · arXiv preprint (2026)",
+        summary: "How strongly do the faint gamma-ray sources cluster? Lensing cross-correlations point to a bias of about 2 or more at z ≈ 1, in host halos of around 10¹³ solar masses.",
+        url: "https://arxiv.org/abs/2609.19259" },
+      { id: "pbh2025", type: "paper", x: 640, y: 470, mx: 70, my: 820, label: "Primordial Black Holes", year: "2025",
+        kicker: "Dark Matter · Gamma-Ray Background",
+        title: "Primordial Black Holes as Coma Cluster Dark Matter and the Unresolved γ-Ray Background",
+        meta: "Mould, J., & Thakore, B. · The Astronomical Journal (2025)",
+        summary: "Testing whether primordial black holes could make up the dark matter in the Coma cluster, using what the unresolved gamma-ray background allows.",
+        url: "https://arxiv.org/abs/2507.01421" },
+
+      { id: "gr2020", type: "paper", x: 120, y: 175, mx: 50, my: 145, label: "Karmarkar Compact Stars", year: "2020",
+        kicker: "Compact Stars",
+        title: "Anisotropic Compact Star Model Satisfying Karmarkar Conditions",
+        meta: "Pandya, D. M., Thakore, B., et al.",
+        summary: "An anisotropic model for compact stars built on the Karmarkar embedding condition in general relativity.",
+        url: "https://arxiv.org/abs/1911.10898" },
+      { id: "gr2021", type: "paper", x: 140, y: 440, mx: 60, my: 330, label: "Anisotropic Neutron Stars", year: "2021",
+        kicker: "Compact Stars",
+        title: "A New Class of Analytical Solutions Describing Anisotropic Neutron Stars in General Relativity",
+        meta: "Solanki, J., & Thakore, B.",
+        summary: "New analytical solutions to Einstein's field equations for anisotropic neutron stars, giving a stable, causal model with a linear equation of state.",
+        url: "https://arxiv.org/abs/2108.00161" },
+      { id: "fr2021", type: "paper", x: 310, y: 495, mx: 215, my: 290, label: "Stars in f(R) Gravity", year: "2021",
+        kicker: "Compact Stars",
+        title: "Finch-Skea Solutions of Anisotropic Stellar Models in f(R) Gravity",
+        meta: "Thakore, B., Goti, R., Shah, S., Pandya, H., & Pandya, D. M.",
+        summary: "Modelling strange stars such as SMC X-1 and PSR J1614-2230 in modified f(R) gravity, reproducing masses up to about 2.5 solar masses.",
+        url: "https://arxiv.org/abs/2008.04816" },
+    ];
+
+    const links = [
+      ["ugrb", "lens2025"], ["ugrb", "mt2026"], ["ugrb", "bias2026"], ["ugrb", "pbh2025"],
+      ["lens2025", "mt2026"], ["mt2026", "bias2026"],
+      ["dm", "ugrb"], ["dm", "pbh2025"], ["dm", "lens2025"],
+      ["cs", "gr2020"], ["cs", "gr2021"], ["cs", "fr2021"], ["gr2020", "gr2021"],
+      ["cs", "dm"],
+    ];
+
+    const names = [
+      { text: "Gamma-Ray Background", x: 745, y: 560, mx: 210, my: 885 },
+      { text: "Compact Stars", x: 215, y: 100, mx: 210, my: 85 },
+      { text: "Dark Matter", x: 470, y: 250, mx: 300, my: 412 },
+    ];
+
+    // ─────────────────────────────────────────────
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.getElementById("chart");
+    const gLinks = document.getElementById("links");
+    const gNames = document.getElementById("names");
+    const gStars = document.getElementById("stars");
+    const byId = Object.fromEntries(stars.map(s => [s.id, s]));
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let firstDraw = true;
+
+    function el(tag, attrs, parent) {
+      const e = document.createElementNS(NS, tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(e);
+      return e;
+    }
+
+    // Phones held upright get their own layout so labels stay readable.
+    let portrait = false;
+    function layout() {
+      portrait = window.innerHeight > window.innerWidth * 1.1;
+      if (portrait) {
+        svg.setAttribute("viewBox", "0 -30 420 960");
+        return p => ({ x: p.mx, y: p.my });
+      }
+      svg.setAttribute("viewBox", "-40 -20 1080 680");
+      return p => ({ x: p.x, y: p.y });
+    }
+
+    function draw() {
+      const pos = layout();
+      gLinks.innerHTML = ""; gNames.innerHTML = ""; gStars.innerHTML = "";
+      svg.classList.toggle("reveal", firstDraw && !reduceMotion);
+
+      links.forEach(([a, b], i) => {
+        const p = pos(byId[a]), q = pos(byId[b]);
+        const len = Math.hypot(q.x - p.x, q.y - p.y);
+        const line = el("line", { x1: p.x, y1: p.y, x2: q.x, y2: q.y, class: "link" }, gLinks);
+        line.dataset.a = a; line.dataset.b = b;
+        line.style.setProperty("--len", len);
+        line.style.setProperty("--d", (0.9 + i * 0.09) + "s");
+      });
+
+      names.forEach((n, i) => {
+        const p = pos(n);
+        const t = el("text", { x: p.x, y: p.y, "text-anchor": "middle", class: "const-name" }, gNames);
+        t.textContent = n.text;
+        t.style.setProperty("--d", (2.0 + i * 0.15) + "s");
+      });
+
+      stars.forEach((s, i) => {
+        const p = pos(s);
+        const isTopic = s.type === "topic";
+        const r = isTopic ? 6 : 3.6;
+        const g = el("g", { class: "star " + s.type, tabindex: 0, role: "button", "aria-label": s.title }, gStars);
+        g.dataset.id = s.id;
+        g.style.setProperty("--d", (0.6 + i * 0.07) + "s");
+
+        el("circle", { cx: p.x, cy: p.y, r: r * 6, class: "halo" }, g);
+        el("circle", { cx: p.x, cy: p.y, r: r + 7, class: "ring" }, g);
+        const core = el("circle", { cx: p.x, cy: p.y, r: r, class: "core twinkle" }, g);
+        core.style.animationDelay = (i * 0.37 % 3) + "s";
+        // generous invisible hit area for fingers
+        el("circle", { cx: p.x, cy: p.y, r: 22, fill: "transparent" }, g);
+
+        // Labels sit to the right, or the left when near the right edge.
+        const right = portrait ? p.x < 260 : p.x < 810;
+        const dx = right ? r + 12 : -(r + 12);
+        const anchor = right ? "start" : "end";
+        const lbl = el("text", { x: p.x + dx, y: p.y + (s.year ? -2 : 4), "text-anchor": anchor, class: "star-label" }, g);
+        lbl.textContent = s.label;
+        if (isTopic) { lbl.style.fontWeight = 700; lbl.style.fill = "#cfe4ff"; }
+        if (s.year) {
+          const yr = el("text", { x: p.x + dx, y: p.y + 14, "text-anchor": anchor, class: "star-year" }, g);
+          yr.textContent = s.year;
+        }
+
+        g.addEventListener("mouseenter", () => highlight(s.id));
+        g.addEventListener("mouseleave", () => highlight(activeId));
+        g.addEventListener("click", () => open(s.id));
+        g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(s.id); } });
+      });
+
+      if (activeId) markActive(activeId);
+      firstDraw = false;
+    }
+
+    // ── highlighting and the info card ──
+    let activeId = null;
+    const card = document.getElementById("card");
+
+    function highlight(id) {
+      gLinks.querySelectorAll(".link").forEach(l => {
+        l.classList.toggle("hot", !!id && (l.dataset.a === id || l.dataset.b === id));
+      });
+    }
+
+    function markActive(id) {
+      gStars.querySelectorAll(".star").forEach(g => g.classList.toggle("active", g.dataset.id === id));
+      highlight(id);
+    }
+
+    function open(id) {
+      const s = byId[id];
+      activeId = id;
+      markActive(id);
+      document.getElementById("card-kicker").textContent = s.type === "topic" ? "Field of study" : s.kicker;
+      document.getElementById("card-title").textContent = s.title;
+      const meta = document.getElementById("card-meta");
+      meta.textContent = s.meta || "";
+      meta.style.display = s.meta ? "" : "none";
+      document.getElementById("card-summary").textContent = s.summary;
+      const a = document.getElementById("card-link");
+      a.href = s.url;
+      a.textContent = s.linkText || "Read on arXiv";
+      // keep the card clear of the star that was picked
+      const r = gStars.querySelector('.star[data-id="' + id + '"] .core').getBoundingClientRect();
+      card.classList.toggle("left", !portrait && r.left > window.innerWidth / 2);
+      card.classList.toggle("at-top", portrait && r.top > window.innerHeight / 2);
+      card.classList.add("open");
+    }
+
+    function close() {
+      activeId = null;
+      markActive(null);
+      card.classList.remove("open");
+    }
+
+    document.getElementById("card-close").addEventListener("click", close);
+    document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+    svg.addEventListener("click", e => { if (!e.target.closest(".star")) close(); });
+
+    // ── background starfield ──
+    const canvas = document.getElementById("sky");
+    const ctx = canvas.getContext("2d");
+    let bg = [], W = 0, H = 0, dpr = 1;
+    let px = 0, py = 0, tx = 0, ty = 0;
+
+    function seedSky() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth; H = window.innerHeight;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round(W * H / 2600);
+      bg = Array.from({ length: n }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() < 0.92 ? Math.random() * 0.9 + 0.2 : Math.random() * 1.4 + 0.9,
+        depth: Math.random() * 0.8 + 0.2,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.8 + 0.3,
+        blue: Math.random() < 0.35,
+      }));
+    }
+
+    function frame(t) {
+      px += (tx - px) * 0.04; py += (ty - py) * 0.04;
+      ctx.clearRect(0, 0, W, H);
+      for (const s of bg) {
+        const tw = reduceMotion ? 0.8 : 0.55 + 0.45 * Math.sin(s.phase + t * 0.001 * s.speed);
+        const x = s.x + px * s.depth * 14, y = s.y + py * s.depth * 14;
+        ctx.globalAlpha = tw * (0.35 + s.depth * 0.6);
+        ctx.fillStyle = s.blue ? "#9fc9ff" : "#ffffff";
+        ctx.beginPath();
+        ctx.arc(x, y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      if (!reduceMotion) requestAnimationFrame(frame);
+    }
+
+    window.addEventListener("pointermove", e => {
+      tx = (e.clientX / W - 0.5); ty = (e.clientY / H - 0.5);
+    });
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { seedSky(); draw(); if (reduceMotion) frame(0); }, 120);
+    });
+
+    seedSky();
+    draw();
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
