@@ -169,6 +169,7 @@
     .hint { transition: opacity 0.2s; }
 
     .card .kicker {
+      padding-right: 28px;
       font-size: 0.66rem;
       letter-spacing: 3px;
       text-transform: uppercase;
@@ -317,11 +318,11 @@
     // ─────────────────────────────────────────────
     // Data: topics (bright blue stars) and papers (white stars).
     // x/y are positions on a 1000 x 640 landscape chart;
-    // mx/my are positions on a 420 x 900 chart used on phones held upright.
+    // mx/my are positions on a 420 x 1000 chart used on phones held upright.
     // To add a paper: add an entry to `stars` and its connections to `links`.
     // ─────────────────────────────────────────────
     const stars = [
-      { id: "ugrb", type: "topic", x: 700, y: 300, mx: 190, my: 640, label: "Gamma-Ray Background",
+      { id: "ugrb", type: "topic", x: 700, y: 300, mx: 190, my: 740, label: "Gamma-Ray Background",
         title: "Unresolved Gamma-Ray Background",
         summary: "The faint, diffuse glow left over once every gamma-ray source bright enough to see individually has been removed. My work asks what makes it up: blazars, star-forming galaxies, misaligned AGN, or something darker.",
         url: "https://en.wikipedia.org/wiki/Gamma-ray_background", linkText: "Learn more" },
@@ -334,25 +335,35 @@
         summary: "Neutron stars and other ultra-dense objects, where matter is pushed to its limits and general relativity is essential to describe their structure.",
         url: "https://en.wikipedia.org/wiki/Compact_object", linkText: "Learn more" },
 
-      { id: "lens2025", type: "paper", x: 585, y: 160, mx: 60, my: 560, label: "Lensing × Gamma-Rays", year: "2025",
+      { id: "gw", type: "topic", x: 520, y: 520, mx: 330, my: 510, label: "Gravitational Waves",
+        title: "Gravitational Waves",
+        summary: "Ripples in spacetime from merging black holes and neutron stars. When they pass a massive object they can be lensed, and small dark matter clumps leave faint wave-optics fingerprints on the signal.",
+        url: "https://en.wikipedia.org/wiki/Gravitational_wave", linkText: "Learn more" },
+      { id: "cusps2026", type: "paper", x: 390, y: 600, mx: 240, my: 590, label: "Lensed GWs & Prompt Cusps", year: "2026",
+        kicker: "Gravitational Waves · Dark Matter",
+        title: "Wave-Optics Imprints of Warm Dark Matter Subhalos with Prompt Cusps on Strongly Lensed Gravitational Waves",
+        meta: "Thakore, B., & Ando, S. · arXiv preprint (2026)",
+        summary: "Can lensed gravitational waves detect small warm dark matter subhalos? The signal is most sensitive to particle masses of about 20 to 40 keV, while prompt cusps add only a modest boost, so a detection would reveal substructure but not its inner profile.",
+        url: "https://arxiv.org/abs/2609.28626" },
+      { id: "lens2025", type: "paper", x: 585, y: 160, mx: 60, my: 660, label: "Lensing × Gamma-Rays", year: "2025",
         kicker: "Gamma-Ray Background",
         title: "High-Significance Detection of Correlation Between the Unresolved Gamma-Ray Background and the Large Scale Cosmic Structure",
         meta: "Thakore, B., et al. · JCAP 2025(06) 037",
         summary: "A high-significance detection of the correlation between Fermi-LAT's unresolved gamma-ray sky and weak gravitational lensing from the Dark Energy Survey.",
         url: "https://arxiv.org/abs/2501.10506" },
-      { id: "mt2026", type: "paper", x: 850, y: 235, mx: 330, my: 600, label: "Multi-Tracer γ-Ray Sky", year: "2026",
+      { id: "mt2026", type: "paper", x: 850, y: 235, mx: 330, my: 700, label: "Multi-Tracer γ-Ray Sky", year: "2026",
         kicker: "Gamma-Ray Background",
         title: "Multi-Tracer Cross-Correlations of the Unresolved γ-Ray Sky",
         meta: "Thakore, B., et al. · JCAP 2026(07) 035",
         summary: "Combining galaxy clustering and weak lensing from DES with 12 years of Fermi-LAT data for a 10σ detection, pointing to an extragalactic origin for the unresolved gamma-ray background.",
         url: "https://arxiv.org/abs/2601.13312" },
-      { id: "bias2026", type: "paper", x: 875, y: 370, mx: 320, my: 730, label: "Clustering Bias", year: "2026",
+      { id: "bias2026", type: "paper", x: 875, y: 370, mx: 320, my: 830, label: "Clustering Bias", year: "2026",
         kicker: "Gamma-Ray Background",
         title: "On the Clustering Bias of Unresolved Gamma-Ray Sources",
         meta: "Thakore, B., et al. · arXiv preprint (2026)",
         summary: "How strongly do the faint gamma-ray sources cluster? Lensing cross-correlations point to a bias of about 2 or more at z ≈ 1, in host halos of around 10¹³ solar masses.",
         url: "https://arxiv.org/abs/2609.19259" },
-      { id: "pbh2025", type: "paper", x: 640, y: 470, mx: 70, my: 820, label: "Primordial Black Holes", year: "2025",
+      { id: "pbh2025", type: "paper", x: 640, y: 470, mx: 70, my: 920, label: "Primordial Black Holes", year: "2025",
         kicker: "Dark Matter · Gamma-Ray Background",
         title: "Primordial Black Holes as Coma Cluster Dark Matter and the Unresolved γ-Ray Background",
         meta: "Mould, J., & Thakore, B. · The Astronomical Journal (2025)",
@@ -385,10 +396,11 @@
       ["dm", "ugrb"], ["dm", "pbh2025"], ["dm", "lens2025"],
       ["cs", "gr2020"], ["cs", "gr2021"], ["cs", "fr2021"], ["gr2020", "gr2021"],
       ["cs", "dm"],
+      ["dm", "gw"], ["gw", "cusps2026"], ["dm", "cusps2026"],
     ];
 
     const names = [
-      { text: "Gamma-Ray Background", x: 745, y: 560, mx: 210, my: 885 },
+      { text: "Gamma-Ray Background", x: 800, y: 615, mx: 210, my: 985 },
       { text: "Compact Stars", x: 215, y: 100, mx: 210, my: 85 },
       { text: "Dark Matter", x: 470, y: 250, mx: 300, my: 412 },
     ];
@@ -415,7 +427,7 @@
     function layout() {
       portrait = window.innerHeight > window.innerWidth * 1.1;
       if (portrait) {
-        svg.setAttribute("viewBox", "0 -30 420 960");
+        svg.setAttribute("viewBox", "0 -30 420 1060");
         return p => ({ x: p.mx, y: p.my });
       }
       svg.setAttribute("viewBox", "-40 -20 1080 680");
@@ -459,7 +471,7 @@
         el("circle", { cx: p.x, cy: p.y, r: 22, fill: "transparent" }, g);
 
         // Labels sit to the right, or the left when near the right edge.
-        const right = portrait ? p.x < 260 : p.x < 810;
+        const right = portrait ? p.x < 230 : p.x < 810;
         const dx = right ? r + 12 : -(r + 12);
         const anchor = right ? "start" : "end";
         const lbl = el("text", { x: p.x + dx, y: p.y + (s.year ? -2 : 4), "text-anchor": anchor, class: "star-label" }, g);
